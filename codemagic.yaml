@@ -1,33 +1,63 @@
 workflows:
-  ios-ipa:
-    name: Sahdownsoclo IPA
+  ios-ipa-unsigned:
+    name: Shadownsoclo IPA unsigned
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
       vars:
-        BUNDLE_ID: app.sahdownsoclo.studio
+        BUNDLE_ID: app.shadownsoclo.studio
+        APP_NAME: Shadownsoclo
       xcode: latest
-      ios_signing:
-        distribution_type: ad_hoc
-        bundle_identifier: app.sahdownsoclo.studio
     scripts:
       - name: Install JS deps
         script: npm install
       - name: Build web
         script: npm run build
-      - name: Capacitor iOS
+      - name: Capacitor iOS (no signing)
         script: |
+          set -e
           npx cap add ios
           npx cap sync ios
-      - name: Set bundle id
-        script: |
+          if [ -f ios/App/Podfile ]; then
+            cd ios/App
+            pod install
+            cd ../..
+          fi
           PLIST=ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $APP_NAME" "$PLIST" || \
+            /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string $APP_NAME" "$PLIST"
           /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_ID" "$PLIST" || \
-          /usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string $BUNDLE_ID" "$PLIST"
-      - name: Build IPA
+            /usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string $BUNDLE_ID" "$PLIST"
+      - name: Archive unsigned
         script: |
-          xcode-project use-profiles
-          xcode-project build-ipa --workspace "ios/App/App.xcworkspace" --scheme "App"
+          set -e
+          PBX=ios/App/App.xcodeproj/project.pbxproj
+          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PBX" || true
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$HOME/build/Shadownsoclo.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="" \
+            archive
+      - name: Pack IPA then ZIP
+        script: |
+          set -e
+          APP=$(find "$HOME/build/Shadownsoclo.xcarchive/Products/Applications" -name '*.app' | head -1)
+          test -n "$APP"
+          rm -rf /tmp/ipaout
+          mkdir -p /tmp/ipaout/Payload
+          cp -R "$APP" /tmp/ipaout/Payload/
+          cd /tmp/ipaout
+          zip -r "/tmp/Shadownsoclo-unsigned.ipa" Payload
+          cd /tmp
+          zip -j "/tmp/Shadownsoclo-unsigned.zip" "/tmp/Shadownsoclo-unsigned.ipa"
+          ls -lh /tmp/Shadownsoclo-unsigned.ipa /tmp/Shadownsoclo-unsigned.zip
     artifacts:
-      - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
+      - /tmp/Shadownsoclo-unsigned.zip
+      - /tmp/Shadownsoclo-unsigned.ipa

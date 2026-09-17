@@ -2,34 +2,24 @@
 
 Developer by concu
 
-Proxy **studio UI** (node, rule, rewrite, theme). Không phải client VPN / không phải Shadowrocket.
+Proxy **studio UI** (node, rule, rewrite, theme). Không phải client VPN.
 
-IPA từ Codemagic là **WebView** bọc UI này. Không có Network Extension, không bắt HTTPS, không giả premium.
+IPA là **WebView** bọc UI. Không Network Extension, không MITM, không cài CA.
 
 Repo: https://github.com/helloanhem08/shadownsoclo
 
-## Codemagic → IPA
+## Codemagic → IPA unsigned (không cần cert)
 
-1. [codemagic.io](https://codemagic.io) → add application → GitHub → chọn `helloanhem08/shadownsoclo`.
-2. Team settings → **code signing iOS**: Apple Developer, certificate, provisioning profile cho bundle `app.shadownsoclo.studio`.
-3. Workflow `ios-ipa` (file `codemagic.yaml`) → Start new build.
-4. Tải artifact `.ipa` (Ad Hoc: cài qua thiết bị đã UDID; App Store cần đổi `distribution_type` + ASC).
+1. [codemagic.io](https://codemagic.io) → Add application → GitHub → `helloanhem08/shadownsoclo`
+2. **Không** gắn iOS signing / certificate
+3. Chạy workflow **Shadownsoclo IPA unsigned**
+4. Tải artifact `Shadownsoclo-unsigned.zip` (bên trong là file `.ipa`)
 
-Thiếu signing thì bước `xcode-project use-profiles` sẽ fail — đó là bình thường cho đến khi gắn cert.
+IPA **chưa ký** — iPhone thường không cài trực tiếp. Ký sau bằng Apple ID của bạn (Sideloadly / AltStore / Xcode). TrollStore chỉ máy hỗ trợ.
 
 ## Local web
 
 ```bash
 npm install
 npm run dev
-```
-
-## Capacitor trên Mac (tuỳ chọn)
-
-```bash
-npm install
-npm run build
-npx cap add ios
-npx cap sync ios
-npx cap open ios
 ```
