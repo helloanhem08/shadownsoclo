@@ -88,7 +88,7 @@ export const useStudio = create<StudioState>()(
       headerOn: true,
       traffic: 12.4,
       reqs: 0,
-      profile: "Sahdownsoclo",
+      profile: "Shadownsoclo",
       updateUrl: demo.updateUrl,
       rules: demo.rules,
       rewrites: demo.rewrites,
@@ -126,14 +126,14 @@ export const useStudio = create<StudioState>()(
           mitm: p.mitm,
         });
       },
-      setProfile: (name, url) => set({ profile: name || "Sahdownsoclo", updateUrl: url }),
+      setProfile: (name, url) => set({ profile: name || "Shadownsoclo", updateUrl: url }),
       downloadConf: () => {
         const s = get();
         const body = exportConf(s);
         const blob = new Blob([body], { type: "text/plain" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `${s.profile || "sahdownsoclo"}.conf`;
+        a.download = `${s.profile || "shadownsoclo"}.conf`;
         a.click();
       },
       flash: (msg) => {
@@ -145,7 +145,7 @@ export const useStudio = create<StudioState>()(
       currentNode: () => NODES.find((n) => n.id === get().nodeId) ?? NODES[0],
     }),
     {
-      name: "sahdownsoclo-studio",
+      name: "shadownsoclo-studio",
       partialize: (s) => ({
         theme: s.theme,
         accent: s.accent,

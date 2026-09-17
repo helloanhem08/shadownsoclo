@@ -14,7 +14,7 @@ export type ParsedConf = {
 };
 
 export const DEMO_CONF = `[General]
-update-url = https://example.invalid/sahdownsoclo
+update-url = https://example.invalid/shadownsoclo
 
 [Rule]
 AND,((DOMAIN-SUFFIX,googlevideo.com),(PROTOCOL,UDP)),REJECT

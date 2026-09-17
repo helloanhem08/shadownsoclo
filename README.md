@@ -1,4 +1,6 @@
-# Sahdownsoclo
+# Shadownsoclo
+
+Developer by concu
 
 Proxy **studio UI** (node, rule, rewrite, theme). Không phải client VPN / không phải Shadowrocket.
 
@@ -9,7 +11,7 @@ Repo: https://github.com/helloanhem08/shadownsoclo
 ## Codemagic → IPA
 
 1. [codemagic.io](https://codemagic.io) → add application → GitHub → chọn `helloanhem08/shadownsoclo`.
-2. Team settings → **code signing iOS**: Apple Developer, certificate, provisioning profile cho bundle `app.sahdownsoclo.studio`.
+2. Team settings → **code signing iOS**: Apple Developer, certificate, provisioning profile cho bundle `app.shadownsoclo.studio`.
 3. Workflow `ios-ipa` (file `codemagic.yaml`) → Start new build.
 4. Tải artifact `.ipa` (Ad Hoc: cài qua thiết bị đã UDID; App Store cần đổi `distribution_type` + ASC).
 

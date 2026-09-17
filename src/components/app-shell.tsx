@@ -38,6 +38,12 @@ function applyLook(theme: ThemeId, accent: AccentId, radius: RadiusId, density: 
   el.dataset.density = density;
 }
 
+function Credit({ className }: { className?: string }) {
+  return (
+    <p className={cn("text-[11px] tracking-wide text-muted", className)}>Developer by concu</p>
+  );
+}
+
 function policyClass(p: string) {
   const u = p.toUpperCase();
   if (u.includes("REJECT")) return "text-danger bg-danger/10";
@@ -152,6 +158,7 @@ function HomeView() {
           <Stat k="Tải lên" v={ul} />
           <Stat k="Độ trễ" v={connected ? `${node.ping} ms` : "—"} />
         </div>
+        <Credit className="mt-4" />
       </section>
 
       <section className="rounded-xl border border-line bg-elevated p-4">
@@ -390,8 +397,9 @@ function LookView() {
         <p className="text-[11px] tracking-wide text-muted uppercase">Studio</p>
         <h2 className="mt-1 font-display text-2xl leading-tight">Tùy chỉnh giao diện</h2>
         <p className="mt-2 text-sm leading-relaxed text-muted">
-          Đổi nền, accent, bo góc và mật độ. Toàn bộ app đổi ngay — không giống Shadowrocket.
+          Đổi nền, accent, bo góc và mật độ. Toàn bộ app đổi ngay.
         </p>
+        <Credit className="mt-2" />
       </header>
 
       <section>
@@ -514,8 +522,9 @@ function MoreView() {
       </section>
 
       <p className="rounded-lg border border-line bg-subtle px-3 py-2.5 text-xs leading-relaxed text-muted">
-        Sahdownsoclo quản lý hostname và rule trên thiết bị. Không chạy script giả premium, không tunnel packet.
+        Shadownsoclo quản lý hostname và rule trên thiết bị. Không chạy script giả premium, không tunnel packet.
       </p>
+      <p className="text-center text-[11px] text-muted">Developer by concu</p>
 
       <section className="rounded-xl border border-line bg-elevated p-4">
         <div className="mb-3 flex items-center justify-between">
@@ -706,15 +715,17 @@ export function AppShell() {
           <header className="mb-4 flex items-end justify-between md:hidden">
             <div>
               <p className="text-[11px] text-muted tabular">{time || "—"}</p>
-              <h1 className="font-display text-[28px] leading-none tracking-tight">Sahdownsoclo</h1>
+              <h1 className="font-display text-[28px] leading-none tracking-tight">Shadownsoclo</h1>
               <p className="mt-1 text-xs text-muted">proxy studio</p>
+              <Credit className="mt-1" />
             </div>
           </header>
           <header className="mb-4 hidden items-end justify-between md:flex">
             <div>
               <p className="text-[11px] text-muted tabular">{time || "—"}</p>
-              <h1 className="font-display text-[32px] leading-none tracking-tight">Sahdownsoclo</h1>
+              <h1 className="font-display text-[32px] leading-none tracking-tight">Shadownsoclo</h1>
               <p className="mt-1 text-xs text-muted">Xem trước trực tiếp theo giao diện đang chọn</p>
+              <Credit className="mt-1" />
             </div>
           </header>
 
